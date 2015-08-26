@@ -68,11 +68,6 @@
                 /*----------------- Début de la définition du contextMenu ----------------*/
                 // Création du contextMenu
                 var contextMenu = $("<ul>").addClass("mkzmapper-optionsContextMenu").appendTo(ViewBoard);
-                $("<li>").data("mkzmapper-action", "delete").append('<span class="fa fa-times" ></span> Supprimer').appendTo(contextMenu);
-                $("<li>").append('----').appendTo(contextMenu);
-                var mkzStyle     = $("<li>").addClass("mkzmapper-style").append('<span class="fa fa-pencil"></span> Style  <span class="mkzmapper-menu_hidden"> > </span>').appendTo(contextMenu);
-                var mkzUnderMenu = $("<ul>").addClass("mkzmapper-underMenu").appendTo(mkzStyle);
-
                 var menuStyle = options.menuStyle;
                 var Class;
 
@@ -80,14 +75,14 @@
                 {
                     Class = menuStyle[i].dashed ? "fa-ellipsis-h" : "fa-minus"; //choix de l'icône selon pointillé ou non.
 
-                    $("<li>").data("mkzmapper-action", menuStyle[i].action).append("<span class= 'fa " + Class + "' style='color :" + menuStyle[i].color + ";'></span> " + menuStyle[i].name).appendTo(mkzUnderMenu);
+                    $("<li>").data("mkzmapper-action", menuStyle[i].action).append("<span class= 'fa " + Class + "' style='color :" + menuStyle[i].color + ";'></span> " + menuStyle[i].name).appendTo(contextMenu);
                     if (i != menuStyle.length - 1)
-                        $("<li>").append('----').appendTo(mkzUnderMenu);
+                        $("<li>").append('----').appendTo(contextMenu);
                 }
 
                 $(contextMenu).menu(); // instancie le contextMenu comme un menu jQueryUI
 
-                // Définit le click droit sur une connection.
+                // Définit le click droit sur une connexion.
                 nonPlumbing.bind("contextmenu", function(conn, event) {
 
                     event.preventDefault(); // Passe outre l'évènement normal.
@@ -103,6 +98,35 @@
                     });
                 });
 
+                // Définit la click sur la connexion.
+                nonPlumbing.bind("click", function (conn, event){
+                    var styles = options.menuStyle;
+                    var connector;
+                    var Uuids = conn.getUuids();
+
+                    mkzmapper.deselect(diagram);
+
+                    var info = {
+                        style : $(conn).data('mkzmapper-style'),
+                        type  : $(conn).data('mkzmapper-type'),
+                        connector : $(conn).data('mkzmapper-connector'),
+                    }
+
+                    nonPlumbing.detach({
+                        uuids: Uuids
+                    });
+                    var newConn = nonPlumbing.connect({
+                        uuids: Uuids,
+                        type: 'Selected',
+                        connector: info.connector
+                    });
+                    $(newConn).data("mkzmapper-style", info.style);
+                    $(newConn).data("mkzmapper-type", info.type);
+                    $(newConn).data("mkzmapper-connector", info.connector);
+
+                    mkzmapper.selected.connector.push(newConn);
+                    mkzmapper.selected.Plumb = nonPlumbing;
+                });
                 // If the document is clicked somewhere
                 $(document).bind("mousedown", function(e) {
                     // If the clicked element is not the menu;
@@ -117,24 +141,21 @@
                     var data = contextMenu.data("mkzmapper-connect"); // récupère les id des ancres.
                     var styles = options.menuStyle;
 
-                    if ($(this).data("mkzmapper-action") == "delete") {
-                        // A case for each action. Your actions here
-                        nonPlumbing.detach({
-                            uuids: data
-                        }); // Détache la connexion.
-                    } else {
-                        for (var j = 0; j < styles.length; j++)
-                            if (styles[j].action == $(this).data("mkzmapper-action")) {
-                                nonPlumbing.detach({
-                                    uuids: data
-                                });
-                                var conn = nonPlumbing.connect({
-                                    uuids: data,
-                                    type: styles[j].type,
-                                    connector: styles[j].connector
-                                });
-                                $(conn).data('mkzmapper-style', styles[j].action); // Definit le style de connection, pour recréer le schéma. 
-                            }
+                    for (var j = 0; j < styles.length; j++)
+                    {
+                        if (styles[j].action == $(this).data("mkzmapper-action")) {
+                            nonPlumbing.detach({
+                                uuids: data
+                            });
+                            var conn = nonPlumbing.connect({
+                                uuids: data,
+                                type: styles[j].type,
+                                connector: styles[j].connector
+                            });
+                            $(conn).data('mkzmapper-style', styles[j].action); // Definit le style de connection, pour recréer le schéma. 
+                            $(conn).data('mkzmapper-type', styles[j].type);
+                            $(conn).data('mkzmapper-connector', styles[j].connector)
+                        }
                     }
                     // Hide it AFTER the action was triggered
                     contextMenu.hide(100);
@@ -211,22 +232,19 @@
                     var appui = touche.which || touche.keyCode; // le code est compatible tous navigateurs grâce à ces deux propriétés
                 
                     if(appui == 46){ // si le code de la touche est égal à 46 (Supp) supprime les éléments selectionnés
-
-                       mkzmapper.selected.elements.forEach(function(item){
-                            mkzmapper.deleteServer($(item), $(feeder.get(0)),mkzmapper.selected.Plumb /*diagram.data("mkzmapper-jsPlumbInstance")*/, board);
+                        mkzmapper.selected.elements.forEach(function(item){
+                            mkzmapper.deleteServer($(item), $(feeder.get(0)),mkzmapper.selected.Plumb, board);
+                        });
+                        mkzmapper.selected.connector.forEach(function(item){
+                            mkzmapper.selected.Plumb.detach({uuids : item.getUuids()});
                         });
                         mkzmapper.selected.elements = [];
+                        mkzmapper.selected.connector = [];
                         mkzmapper.selected.Plumb = "";
                     }
                     if(appui == 27) // si le code de la touche est égal à 27 (escape) désélectionne tous les éléments
                     {
-                        diagram.data("mkzmapper-jsPlumbInstance").clearDragSelection();
-                        mkzmapper.selected.elements.forEach(function(item){
-                            mkzmapper.selected.Plumb.selectEndpoints({source:$(item)}).setPaintStyle({ fillStyle:"#565656", strokeStyle:"#363636" });
-                            
-                        });
-                        mkzmapper.selected.elements = [];
-                        mkzmapper.selected.Plumb = "";
+                        mkzmapper.deselect(diagram);
 
                     }
 
@@ -234,12 +252,8 @@
 
                 // Selection multiple
                board.mousedown(function(event){
-                    diagram.data("mkzmapper-jsPlumbInstance").clearDragSelection();
-                    mkzmapper.selected.elements.forEach(function(item){
-                            mkzmapper.selected.Plumb.selectEndpoints({source:$(item)}).setPaintStyle({ fillStyle:"#565656", strokeStyle:"#363636" }); 
-                    });
-                    mkzmapper.selected.elements = [];
-                    mkzmapper.selected.Plumb = "";
+                    mkzmapper.deselect(diagram);
+                    
 
                     // Calcul de la position du curseur dans le board.
                     var offSetX = parseInt(ViewBoard.scrollLeft())-parseInt(diagram.findPos().x) ;
@@ -343,7 +357,6 @@
                             {
                                 mkzmapper.selected.Plumb = diagram.data("mkzmapper-jsPlumbInstance");
                                 mkzmapper.selected.elements.push(this);
-
                                 mkzmapper.selected.Plumb.selectEndpoints({source:$(this)}).setPaintStyle({ strokeStyle:"#FFF" }); 
                                 mkzmapper.selected.Plumb.addToDragSelection($(this));
                             }
@@ -473,6 +486,7 @@ var mkzmapper = {};
 mkzmapper.selected = {
     elements : [],
     Plumb    : "",
+    connector : [],
 };
 /**
  * Function defaultOptions
@@ -640,14 +654,7 @@ mkzmapper.blockOptions = function (item, diagram, feeder) {
         item.mousedown(function(event){
             if(mkzmapper.selected.elements.indexOf(this) == -1)/*!$(this).is(".mkzmapper-multiSelected"))*/
             {
-
-                diagram.data("mkzmapper-jsPlumbInstance").clearDragSelection();
-
-                mkzmapper.selected.elements.forEach(function(item){
-                    mkzmapper.selected.Plumb.selectEndpoints({source:$(item)}).setPaintStyle({ fillStyle:"#565656", strokeStyle:"#363636" });
-                });
-                mkzmapper.selected.elements = [];
-
+                mkzmapper.deselect(diagram);
                 mkzmapper.selected.elements.push(this);
                 mkzmapper.selected.Plumb = diagram.data("mkzmapper-jsPlumbInstance");
                 mkzmapper.selected.Plumb.selectEndpoints({source:$(this)}).setPaintStyle({strokeStyle:"#FFF" });
@@ -846,6 +853,14 @@ mkzmapper.registerConnector = function(diagram) {
             lineWidth: 6
         } // Style au passage de la connexion.
     });
+
+    Plumb.registerConnectionType("Selected", {
+        paintStyle: {
+            dashstyle: "1 1",
+            strokeStyle: "white",
+            lineWidth: 5
+        },
+    });
 }
 
 /**
@@ -971,7 +986,42 @@ mkzmapper.createConnections = function(JsonFile, diagram) {
                     connector: styles[j].connector
                 }); // On recréer la connexion à partir des ancres sources et cibles.
                 $(connect).data('mkzmapper-style', styles[j].action);
+                $(connect).data('mkzmapper-type', styles[j].type);
+                $(connect).data('mkzmapper-connector', styles[j].connector)
             }
         }
     }
+}
+
+mkzmapper.deselect = function(diagram){
+    // Déselection des éléments sélection et retour au style de base.
+    diagram.data("mkzmapper-jsPlumbInstance").clearDragSelection();
+    mkzmapper.selected.elements.forEach(function(item){
+        mkzmapper.selected.Plumb.selectEndpoints({source:$(item)}).setPaintStyle({ fillStyle:"#565656", strokeStyle:"#363636" }); 
+    });
+    mkzmapper.selected.elements = [];
+
+    // Déselecion des connecteurs sélectionnés
+    mkzmapper.selected.connector.forEach(function(item){
+        Uuids = item.getUuids(); // On récupère les id des ancres.
+        info = {
+            style     : $(item).data("mkzmapper-style"),
+            type      : $(item).data("mkzmapper-type"),
+            connector : $(item).data("mkzmapper-connector")
+        }
+        mkzmapper.selected.Plumb.detach({   // On détache la connection.
+            uuids: Uuids,
+        });
+        var newConn = mkzmapper.selected.Plumb.connect({  // On recréer la sélection avec le bon style.
+            uuids     : Uuids,
+            type      : info.type,
+            connector : info.connector
+        });
+
+        $(newConn).data('mkzmapper-style', info.style);
+        $(newConn).data('mkzmapper-type', info.type);
+        $(newConn).data('mkzmapper-connector', info.connector);
+    });
+    mkzmapper.selected.connector = [];
+    mkzmapper.selected.Plumb = "";
 }
