@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <head>
+    <title>Example MKZmapper</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
+    <link rel="stylesheet" href="../mkzmapper.css">
+    <link rel="stylesheet" href="example.css">
+ 
+    <!-- JavaScript -->
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"   ></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" ></script>
+    <script src="../lib/canvas2monDiagram2.js"></script>
+    <script src="../lib/html2canvas.js"></script>
+    <script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
+    <script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
+    <script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script> 
+
+    <script src="../lib/dom.jsPlumb-1.7.6.js" ></script>
+    <script src="../mkzmapper.js"             ></script>
+    <script src="description.js"              ></script>
+
+
+
+  </head>
+    <script>
+    $(function(){
+      var DiagX = parseInt($("#monDiagram").findPos().x);
+      $("#monDiagram").css("width", parseInt($("html").css("width"))-DiagX -250);
+      $("#detail").css({ "height": "100%", "color": "#FFF", "left":($("#monDiagram").findPos().x+10+ parseInt($("#monDiagram").css("width")))+"px"})
+      var options = 
+      {
+        width  : 2000,
+        height : 1000,
+        feeder    : ".monFeeder",
+        menuStyle : [
+            { "action" : "bddS"   , "name" : "BDD (Straight)"   , "color" : "#D58888", "colorHover": "#A86969", "connector" : "Straight", "dashed" : true},
+            { "action" : "bddC"   , "name" : "BDD (Curving)"    , "color" : "#D58888", "colorHover": "#A86969", "connector" : "Bezier"  , "dashed" : true},
+            { "action" : "apiS"   , "name" : "API (Straight)"   , "color" : "#86CFEC", "colorHover": "#69A8C2", "connector" : "Straight", "dashed" : true},
+            { "action" : "apiC"   , "name" : "API (Curving)"    , "color" : "#86CFEC", "colorHover": "#69A8C2", "connector" : "Bezier"  , "dashed" : true},
+            { "action" : "appliS" , "name" : "Appli (Straight)" , "color" : "white"  , "colorHover": "#D58888", "connector" : "Straight", "dashed" : false},
+            { "action" : "appliC" , "name" : "Appli (Curving)"  , "color" : "white"  , "colorHover": "#D58888", "connector" : "Bezier"  , "dashed" : false}
+        ],
+        itemOnSelect : function($item){
+
+        $("#detail legend").css({ "color": "white", "font-weight":" bold"});
+
+        optionDblclick($item, $("#detail"), $("#monDiagram") );
+        }
+    };
+      $(".monDiagram").mkzmapper(options);
+      $("#monDiagram2").mkzmapper();
+
+      $('#export').click(function(event){
+        var objet = $("#monDiagram").mkzmapperExport();
+        seen = [];
+        json = JSON.stringify(objet, null ,'\t');
+        $("#exportRes").val(json);
+      });
+
+      $("#import").click(function(event){
+        $("#monDiagram").mkzmapperImport(JSON.parse($("#exportRes").val()));
+      });
+
+      $("#exportPNG").click(function(event){
+        $("#monDiagram").mkzmapperExportPNG(function(img){
+          window.open($(img).attr("src"));
+        });
+      });
+
+    });
+    
+    </script>
+    
+  <body>
+  <div>
+    <ul class ="monFeeder">
+      <li class = "bdd" data-mkzmapper-id="bdd1" data-info= '{ "ip" : "193.164.22", "Description" : "Base de données MongoDB n°1" }'> <i class="fa fa-database" style ="color : white; margin: 0px 10px;"></i> Mongo01 </li>
+      <li class = "bdd" data-mkzmapper-id="bdd2" data-info= '{ "ip" : "193.164.32", "Description" : "Base de MongoDB données n°2" }'> <i class="fa fa-database" style ="color : white; margin: 0px 10px;"></i> Mongo02 </li>
+      <li class = "bdd" data-mkzmapper-id="bdd3" data-info= '{ "ip" : "193.154.22", "Description" : "Base de MySQL données n°1" }'> <i class="fa fa-database" style ="color : white; margin: 0px 10px;"></i> My01 </li>
+      <li class = "bdd" data-mkzmapper-id="bdd4" data-info= '{ "ip" : "153.164.22", "Description" : "Base de MySQL données n°2" }'> <i class="fa fa-database" style ="color : white; margin: 0px 10px;"></i> My02 </li>
+      <li class = "api"  data-mkzmapper-id="api1" data-info= '{ "ip" : "103.164.22", "Description" : "Api inventaire" }'> <span> <i class="fa fa-tablet" style ="color : white; margin: 0px 10px;"></i> API Inventaire </span> </li>
+      <li class = "api"  data-mkzmapper-id="api2" data-info= '{ "ip" : "103.104.22", "Description" : "Api time" }'> <span> <i class="fa fa-tablet" style ="color : white; margin: 0px 10px;"></i> API Time </span> </li>
+      <li class = "api"  data-mkzmapper-id="api3" data-info= '{ "ip" : "103.264.22", "Description" : "Api date" }'> <span> <i class="fa fa-tablet" style ="color : white; margin: 0px 10px;"></i> API Date</span> </li>
+      <li class = "interface" data-mkzmapper-id="interface1" data-info= '{ "host" : "localhost:6060", "Description" : "Interface de contrôle" }'> Interface de contrôle </li>
+      <li class = "interface" data-mkzmapper-id="interface2" data-info= '{  "host" : "localhost:5050", "Description" : "Interface Administration"}'> Interface d'administa</li>
+    </ul>
+  </div>
+
+    <div id = "monDiagram" class = "monDiagram" style = ""></div>
+    <div id = "detail" style= "width : 250px; position : absolute; top : 0px"></div>
+    
+
+    <div style = "position: relative; border: 2px solid #B06565; width: 560px; height: 140px; float: left; top: 15px; background: #211E1E none repeat scroll 0% 0%;">
+      <div id="export"> Exporter </div>
+      <div id="import"> Importer </div>
+      <textarea rows="4" cols="50"  id="exportRes" style="position: absolute; left: 150px; top: 20px; width: 390px;max-width: 390px;">
+      </textarea>
+    </div>
+    <div style = "position : relative; left :585px">
+      <div id="exportPNG"> Exporter png </div>
+      <div class="monDiagram" id="monDiagram2" style = "width : 800px; height : 400px; border : 1px dashed black; position : absolute; left: 150px; top: 10px;">
+      </div>
+    </div>
+
+  </body>
+</html>

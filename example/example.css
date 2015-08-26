@@ -1,0 +1,127 @@
+body 
+{
+	background : #2B2C32;
+}
+
+a:link 
+{ 
+ text-decoration:none; 
+} 
+a:hover 
+{ 
+ text-decoration:none; 
+} 
+
+.monFeeder
+{
+	width: 290px;
+	height: 475px;
+	margin: 0px;
+	padding: 8px;
+	float: left;
+	border-right: #A9FFF3 4px solid;
+	border-bottom: #A9FFF3 4px solid;
+}
+
+#monDiagram
+{
+	height: 491px;
+	position: relative;
+	top: 0px;
+	left: 310px;
+	border-bottom: 4px solid #A9FFF3;
+}
+
+.bdd
+{
+	width: 120px;
+	height: 25px;
+	background : #202020;
+	padding: 10px;
+	color: white;
+	border-bottom: 5px solid #7AB7B1;
+	list-style-type : none;
+}
+
+.interface
+{
+	width: 255px;
+	height: 25px;
+	background : #202020;
+	padding: 10px;
+	color: white;
+	border-bottom: 5px solid #666F6D;
+	list-style-type : none;
+}
+
+.api
+{
+	border-radius: 50%;
+	width: 134px;
+	height: 75px;
+	border: 4px solid #FFE99B;
+	list-style-type: none;
+	color : white;
+	background: #202020;
+}
+
+.api span
+{
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	transform: translate(0, -10px);
+	height: 20px;
+}
+/*Block description definition*/
+.infoDetail
+{
+	margin-top: 45px;
+	position: relative;
+	left: 10%;
+}
+
+.infoDetail legend
+{
+	color: white;
+	font-size: 18px;
+}
+
+#export
+{
+	position: absolute;
+	left: 7px;
+	top: 20px;
+	width: 135px;
+	height: 30px;
+	text-align: center;
+	background: #C66F6F  none repeat scroll 0% 0%;
+	color: #FFF;
+	padding-top: 10px;
+}
+
+#import
+{
+	position: absolute;
+	left: 7px;
+	top: 80px;
+	width: 135px;
+	height: 30px;
+	text-align: center;
+	background: #81C9AD none repeat scroll 0% 0%;
+	color: #FFF;
+	padding-top: 10px;
+}
+
+#exportPNG
+{
+	position: absolute;
+	left: 0px;
+	top: 20px;
+	width: 135px;
+	height: 30px;
+	text-align: center;
+	background: #6FA4A8 none repeat scroll 0% 0%;
+	color: #FFF;
+	padding-top: 10px;
+}

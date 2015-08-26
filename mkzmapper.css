@@ -1,0 +1,172 @@
+body 
+{
+	
+	user-select: none; /* L'utilisateur ne pourra plus sélectionner le texte de l'élément qui possède cette propriété CSS */
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+}
+
+.mkzmapper-container      
+{
+  width : 1352px;
+  margin-top : 50px;
+  margin-bottom : 20px;
+}
+
+/* Elements feeder style */
+
+.mkzmapper-DefaultElement
+{
+	width: 255px;
+	height: 25px;
+	background : #202020;
+	padding: 10px;
+	margin: 0px 0px 8px 0px;
+	color: white;
+	border-bottom: 5px solid #666F6D;
+	list-style-type : none;
+}
+
+.mkzmapper-droppable
+{
+	position : relative;
+	margin-top: 8px;
+}
+
+/*Block view definition*/
+.mkzmapper-ViewBoard
+{
+	width  : 85%;
+	height : 750px;
+	overflow-y: auto;
+	overflow-x: auto;
+	margin:0px;
+	position: absolute;
+}
+
+.mkzmapper-board
+{
+	position: relative;
+	top : 0px;
+	left: 0px;
+	background : transparent url("example/grid.png") repeat scroll left top;
+	background-position: top left;
+}
+
+.mkzmapper-board .mkzmapper-element
+{
+	position : absolute;
+	margin: 0px;
+}
+
+
+/*! jQuery UI - v1.10.1 - 2013-02-15
+* http://jqueryui.com
+* Includes: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css
+* Copyright (c) 2013 jQuery Foundation and other contributors Licensed MIT */
+
+.ui-menu {
+	list-style: none;
+	padding: 2px;
+	margin: 0;
+	display: block;
+	outline: none;
+	width : 150px;
+	background : #2B2B2F;
+	color: white;
+}
+.ui-menu .ui-menu {
+	margin-top: -15px;
+	margin-left: -7px;
+	position: absolute;
+	width: 150px
+}
+.ui-menu .ui-menu-item {
+	margin: 0px;
+	padding: 0px 0px 0px 10px;
+	width:94%;
+	height: 90%;
+}
+.ui-menu .ui-menu-item:hover
+{
+	background : #404047;
+}
+.ui-menu .ui-menu-divider {
+	margin: 5px 0px;
+	height: 0px;
+	font-size: 0px;
+	border-bottom: 1px solid #4D4D4D;
+}
+.ui-menu .ui-menu-item a {
+	text-decoration: none;
+	display: block;
+	padding: 2px .4em;
+	line-height: 1.5;
+	min-height: 0; /* support: IE7 */
+	font-weight: normal;
+}
+.ui-menu .ui-menu-item a.ui-state-focus,
+.ui-menu .ui-menu-item a.ui-state-active {
+	font-weight: normal;
+	margin: -1px;
+}
+
+.ui-menu .ui-state-disabled {
+	font-weight: normal;
+	margin: .4em 0 .2em;
+	line-height: 1.5;
+}
+.ui-menu .ui-state-disabled a {
+	cursor: default;
+}
+
+/* icon support */
+.ui-menu-icons {
+	position: relative;
+}
+.ui-menu-icons .ui-menu-item a {
+	position: relative;
+	padding-left: 2em;
+}
+
+/* left-aligned */
+.ui-menu .ui-icon {
+	position: relative;
+	top: .2em;
+	left: .2em;
+}
+
+/* right-aligned */
+.ui-menu .ui-menu-icon {
+	position: static;
+	float: left;
+}
+
+.mkzmapper-optionsContextMenu {
+    display: none;
+    z-index: 1600;
+    position: absolute;
+}
+
+.mkzmapper-menu_hidden
+{
+	position: absolute;
+	right: 5px;
+	font-size: 23px;
+	top: 29px;
+	color: #505050;
+}
+
+._jsPlumb_endpoint
+{ 
+	z-index:1000;
+}
+
+._jsPlumb_connector
+{
+	z-index: 1500;
+}
+
+
+
