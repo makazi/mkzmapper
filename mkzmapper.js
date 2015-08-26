@@ -110,6 +110,7 @@
                         style : $(conn).data('mkzmapper-style'),
                         type  : $(conn).data('mkzmapper-type'),
                         connector : $(conn).data('mkzmapper-connector'),
+                        arrow :  $(conn).data('mkzmapper-arrow')
                     }
 
                     nonPlumbing.detach({
@@ -123,6 +124,8 @@
                     $(newConn).data("mkzmapper-style", info.style);
                     $(newConn).data("mkzmapper-type", info.type);
                     $(newConn).data("mkzmapper-connector", info.connector);
+                    $(newConn).data("mkzmapper-arrow", info.arrow);
+
 
                     mkzmapper.selected.connector.push(newConn);
                     mkzmapper.selected.Plumb = nonPlumbing;
@@ -147,14 +150,35 @@
                             nonPlumbing.detach({
                                 uuids: data
                             });
-                            var conn = nonPlumbing.connect({
+                            var optionStyle = {
                                 uuids: data,
                                 type: styles[j].type,
-                                connector: styles[j].connector
-                            });
+                                connector: styles[j].connector,
+                            };
+
+                            if(styles[j].arrow == 'both')
+                                 optionStyle['overlays']= [
+                                     "Label",
+                                     [ "Arrow", { location:0, direction : -1 } ],
+                                     [ "Arrow", { location:1 } ]
+                                ];
+                            else if(styles[j].arrow == 'backward')
+                                 optionStyle['overlays']= [
+                                     "Label",
+                                     [ "Arrow", { location:0, direction : -1 } ]
+                                ];
+                            else if(styles[j].arrow == 'forward')
+                                 optionStyle['overlays']= [
+                                     "Label",
+                                     [ "Arrow", { location:1 } ]
+                                ];
+
+                            var conn = nonPlumbing.connect( optionStyle);
                             $(conn).data('mkzmapper-style', styles[j].action); // Definit le style de connection, pour recréer le schéma. 
                             $(conn).data('mkzmapper-type', styles[j].type);
-                            $(conn).data('mkzmapper-connector', styles[j].connector)
+                            $(conn).data('mkzmapper-connector', styles[j].connector);
+                            $(conn).data('mkzmapper-arrow', styles[j].arrow);
+
                         }
                     }
                     // Hide it AFTER the action was triggered
@@ -357,7 +381,7 @@
                             {
                                 mkzmapper.selected.Plumb = diagram.data("mkzmapper-jsPlumbInstance");
                                 mkzmapper.selected.elements.push(this);
-                                mkzmapper.selected.Plumb.selectEndpoints({source:$(this)}).setPaintStyle({ strokeStyle:"#FFF" }); 
+                                mkzmapper.selected.Plumb.selectEndpoints({source:$(this)}).setPaintStyle({ strokeStyle:diagram.data("mkzmapper-options").colorSelect }); 
                                 mkzmapper.selected.Plumb.addToDragSelection($(this));
                             }
 
@@ -503,33 +527,46 @@ mkzmapper.defaultOption = function (options) {
         "height": 2000,
         "readOnly": false,
         "schema": {},
+        "colorSelect": "red",
     };
 
     // CONNECTOR OPTION par défaut.
     var defaultConnector = [{
         "color": "#D58888",
+        "width": 5,
         "colorHover": "#A86969",
-        "connector": "Straight"
+        "connector": "Straight",
+        "arrow" : "none"
     }, {
         "color": "#D58888",
+        "width": 5,
         "colorHover": "#A86969",
-        "connector": "Bezier"
+        "connector": "Bezier",
+        "arrow" : "none"
     }, {
         "color": "#86CFEC",
+        "width": 5,
         "colorHover": "#69A8C2",
-        "connector": "Straight"
+        "connector": "Straight",
+        "arrow" : "none"
     }, {
         "color": "#86CFEC",
+        "width": 5,
         "colorHover": "#69A8C2",
-        "connector": "Bezier"
+        "connector": "Bezier",
+        "arrow" : "none"
     }, {
         "color": "white",
+        "width": 5,
         "colorHover": "#D58888",
-        "connector": "Straight"
+        "connector": "Straight",
+        "arrow" : "none"
     }, {
         "color": "white",
+        "width": 5,
         "colorHover": "#D58888",
-        "connector": "Bezier"
+        "connector": "Bezier",
+        "arrow" : "none"
     }];
     // CONTEXTEMENU par defaut.
     var defaultMenu = [{
@@ -537,6 +574,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default6",
             "type": "Default6",
             "color": "#D58888",
+            "width": 5,
             "colorHover": "#A86969",
             "connector": "Straight",
             "dashed": true
@@ -545,6 +583,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default5",
             "type": "Default5",
             "color": "#D58888",
+            "width": 5,
             "colorHover": "#A86969",
             "connector": "Bezier",
             "dashed": true
@@ -553,6 +592,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default4",
             "type": "Default4",
             "color": "#86CFEC",
+            "width": 5,
             "colorHover": "#69A8C2",
             "connector": "Straight",
             "dashed": true
@@ -561,6 +601,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default3",
             "type": "Default3",
             "color": "#86CFEC",
+            "width": 5,
             "colorHover": "#69A8C2",
             "connector": "Bezier",
             "dashed": true
@@ -569,6 +610,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default1",
             "type": "Default1",
             "color": "white",
+            "width": 5,
             "colorHover": "#D58888",
             "connector": "Straight",
             "dashed": false
@@ -577,6 +619,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default2",
             "type": "Default2",
             "color": "white",
+            "width": 5,
             "colorHover": "#D58888",
             "connector": "Bezier",
             "dashed": false
@@ -585,6 +628,7 @@ mkzmapper.defaultOption = function (options) {
             "name": "Default",
             "type": "Default",
             "color": "white",
+            "width": 5,
             "colorHover": "white",
             "connector": "Straight",
             "dashed": false
@@ -622,6 +666,7 @@ mkzmapper.defaultOption = function (options) {
             name: "Default",
             type: "Default",
             color: "white",
+            width: 5,
             colorHover: "white",
             connector: "Straight",
             dashed: false
@@ -657,7 +702,7 @@ mkzmapper.blockOptions = function (item, diagram, feeder) {
                 mkzmapper.deselect(diagram);
                 mkzmapper.selected.elements.push(this);
                 mkzmapper.selected.Plumb = diagram.data("mkzmapper-jsPlumbInstance");
-                mkzmapper.selected.Plumb.selectEndpoints({source:$(this)}).setPaintStyle({strokeStyle:"#FFF" });
+                mkzmapper.selected.Plumb.selectEndpoints({source:$(this)}).setPaintStyle({strokeStyle:diagram.data("mkzmapper-options").colorSelect });
             }
         });
     }
@@ -712,13 +757,7 @@ mkzmapper.createAnchor = function(item, diagram) {
             lineWidth: 4,
             outlineWidth: 1
         },
-        connectorOverlays: [
-            ["Arrow", {
-                width: 20,
-                length: 20,
-                location: 0.67
-            }]
-        ],
+
         connectorStyle: {
             strokeStyle: "white",
             lineWidth: 5
@@ -744,6 +783,7 @@ mkzmapper.createAnchor = function(item, diagram) {
         uuid: "mkzmapper-top1" + item.data('mkzmapper-id'),
         anchor: [0.25, 0, 0, -1]
     }, common);
+
 
     Plumb.addEndpoint(item, {
         uuid: "mkzmapper-top2" + item.data('mkzmapper-id'),
@@ -820,22 +860,22 @@ mkzmapper.registerConnector = function(diagram) {
                 paintStyle: {
                     dashstyle: "4 2",
                     strokeStyle: menuStyle[i].color,
-                    lineWidth: 5
+                    lineWidth: menuStyle[i].width
                 },
                 hoverPaintStyle: {
                     strokeStyle: menuStyle[i].colorHover,
-                    lineWidth: 6
+                    lineWidth: menuStyle[i].width+2
                 }, // Style au passage de la connexion.
             };
         } else {
             connectorStyle = {
                 paintStyle: {
                     strokeStyle: menuStyle[i].color,
-                    lineWidth: 5
+                    lineWidth: menuStyle[i].width
                 },
                 hoverPaintStyle: {
                     strokeStyle: menuStyle[i].colorHover,
-                    lineWidth: 6
+                    lineWidth: menuStyle[i].width+2
                 }, // Style au passage de la connexion.
             };
         }
@@ -851,13 +891,17 @@ mkzmapper.registerConnector = function(diagram) {
         hoverPaintStyle: {
             strokeStyle: "white",
             lineWidth: 6
-        } // Style au passage de la connexion.
+        }, // Style au passage de la connexion.
     });
 
     Plumb.registerConnectionType("Selected", {
         paintStyle: {
             dashstyle: "1 1",
-            strokeStyle: "white",
+            strokeStyle:  diagram.data("mkzmapper-options").colorSelect,
+            lineWidth: 5
+        },
+        hoverPaintStyle: {
+            strokeStyle:  diagram.data("mkzmapper-options").colorSelect,
             lineWidth: 5
         },
     });
@@ -914,8 +958,6 @@ mkzmapper.createBlocks = function(JsonFile, diagram) {
                 "position" : "absolute",
             }).appendTo(board);
             
-            var posSuppY   = parseInt($(newElement).css("height"))*20/100;
-            var posSuppX   = parseInt($(newElement).css("width"))*10/100;
             $(newElement).append( "<label> <span>" + JsonFile.servers[j].txt + "</span> </label>");
             $(newElement).data("mkzmapper-id", id);
             for (var k in JsonFile.servers[j].data)
@@ -932,8 +974,8 @@ mkzmapper.createBlocks = function(JsonFile, diagram) {
             }
             $(elementExist).remove(); // Suppression de la liste des serveurs de l'élément droppé.
         }
-
-        mkzmapper.createAnchor(newElement, diagram) // Création des ancres de liaison sur l'élément.
+           
+        mkzmapper.createAnchor(newElement, diagram); // Création des ancres de liaison sur l'élément.
         mkzmapper.blockOptions(newElement, diagram, feeder); // Rend l'élément draggable dans le board et définit l'évènement click sur x.
 
         newElement.click(function(event) {
@@ -979,15 +1021,34 @@ mkzmapper.createConnections = function(JsonFile, diagram) {
         {
             if (styles[j].action == JsonFile.connections[i].style) // Puis créer la connexion.
             {
-
-                var connect = Plumb.connect({
+                var optionStyle = {
                     uuids: [JsonFile.connections[i].source, JsonFile.connections[i].target],
                     type: styles[j].type,
-                    connector: styles[j].connector
-                }); // On recréer la connexion à partir des ancres sources et cibles.
+                    connector: styles[j].connector,
+                };
+
+                if(styles[j].arrow == 'both')
+                    optionStyle['overlays']= [
+                        "Label",
+                            [ "Arrow", { location:0, direction : -1 } ],
+                            [ "Arrow", { location:1 } ]
+                    ];
+                else if(styles[j].arrow == 'backward')
+                    optionStyle['overlays']= [
+                        "Label",
+                        [ "Arrow", { location:0, direction : -1 } ]
+                    ];
+                else if(styles[j].arrow == 'forward')
+                    optionStyle['overlays']= [
+                        "Label",
+                        [ "Arrow", { location:1 } ]
+                    ];
+                var connect = Plumb.connect(optionStyle); // On recréer la connexion à partir des ancres sources et cibles.
                 $(connect).data('mkzmapper-style', styles[j].action);
                 $(connect).data('mkzmapper-type', styles[j].type);
-                $(connect).data('mkzmapper-connector', styles[j].connector)
+                $(connect).data('mkzmapper-connector', styles[j].connector);
+                $(connect).data('mkzmapper-arrow', styles[j].arrow);
+
             }
         }
     }
@@ -1007,20 +1068,43 @@ mkzmapper.deselect = function(diagram){
         info = {
             style     : $(item).data("mkzmapper-style"),
             type      : $(item).data("mkzmapper-type"),
-            connector : $(item).data("mkzmapper-connector")
+            connector : $(item).data("mkzmapper-connector"),               
+            arrow     : $(item).data("mkzmapper-arrow")
         }
         mkzmapper.selected.Plumb.detach({   // On détache la connection.
             uuids: Uuids,
         });
-        var newConn = mkzmapper.selected.Plumb.connect({  // On recréer la sélection avec le bon style.
-            uuids     : Uuids,
-            type      : info.type,
-            connector : info.connector
-        });
+
+        var optionStyle = {
+            uuids: Uuids,
+            type: info.type,
+            connector:  info.connector,
+        };
+
+        if(info.arrow == 'both')
+            optionStyle['overlays']= [
+                "Label",
+                    [ "Arrow", { location:0, direction : -1 } ],
+                    [ "Arrow", { location:1 } ]
+                ];
+            else if(info.arrow == 'backward')
+                optionStyle['overlays']= [
+                    "Label",
+                    [ "Arrow", { location:0, direction : -1 } ]
+            ];
+            else if(info.arrow == 'forward')
+                optionStyle['overlays']= [
+                    "Label",
+                    [ "Arrow", { location:1 } ]
+                ];
+
+        var newConn = mkzmapper.selected.Plumb.connect(optionStyle);
 
         $(newConn).data('mkzmapper-style', info.style);
         $(newConn).data('mkzmapper-type', info.type);
         $(newConn).data('mkzmapper-connector', info.connector);
+        $(newConn).data('mkzmapper-arrow', info.arrow);
+
     });
     mkzmapper.selected.connector = [];
     mkzmapper.selected.Plumb = "";
