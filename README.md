@@ -11,8 +11,8 @@ JavaScript :
 ```sh
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"   ></script>
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js" ></script>
-<script src="../lib/dom.jsPlumb-1.7.6.js"                 ></script>
-<script src="../mkzmapper.js"                         ></script>
+<script src="../lib/dom.jsPlumb-1.7.6.js"                    ></script>
+<script src="../mkzmapper.js"                                ></script>
 ```
 
 CSS : 
@@ -29,13 +29,13 @@ Il faut commencer par définir un bloc comme étant le diagram, c’est à dire 
 html : *La définition d’un id est indispensable pour le bon fonctionnement du plugin*.
 
 ```sh
-<div id = “monDiagram” style = “width:500px; height:300px; left: 295px;”> </div>
+<div class = “monDiagram” style = “width:500px; height:300px; left: 295px;”> </div>
 ```
 
 JavaScript :
 ```sh
 <script>
-      $(“#monDiagram”).mkzmapper(options);
+      $(“.monDiagram”).mkzmapper(options);
 </script>
 ```
 ### Les options
@@ -43,7 +43,7 @@ JavaScript :
 Les options se présentent sous la forme d’un json, avec un certain nombre d’option dont voici la liste exhaustive : 
 
 - **minWidth | minHeight** : ces deux paramètres permettent de définir la taille minimale scrollable du diagram, par defaut les valeurs sont *[ minWidth : 4000, minHeight : 2000]*.
-- **feeder** :  on fourni l’id de du bloc sous la forme “#<nomduFeeder>” que l’on souhaite définir comme feeder, c’est à dire que les fils directs du bloc seront droppables dans le diagram.
+- **feeder** :  on fourni l’élément sous la forme d'une chaîne de carctère qui l'identifie “#<nomduFeeder>” ou ".<nomduFeeder>" que l’on souhaite définir comme feeder, c’est à dire que les fils directs du bloc seront droppables dans le diagram.
 
 ##### Exemple
 
@@ -69,7 +69,7 @@ var options =
       feeder    : “#monFeeder”,
       … 
 }
-$(“#monDiagram”).mkzmapper(options);
+$(“.monDiagram”).mkzmapper(options);
 ```
 - **menuStyle** : tableau d’objet json permettant de définir l’ensemble des styles d’un Connector. en fournissant un certain nombre de paramètre, dont le seul obligatoire est l’action.
 	- *action* : définit le nom de l’action dans le DOM du contextMenu. [obligatoire].
@@ -95,7 +95,7 @@ JavaScript :
  …
 }
 ```
-- **itemOnSelect** : fonction qui prend en argument l’élément, elle définit l’action effectuée lors d’un double-click sur un élément du diagram, par exemple exploiter les données que l’on fournit dans le DOM des éléments (ex : ip, description etc …).
+- **itemOnSelect** : fonction qui prend en argument l’élément, elle définit l’action effectuée lors d’un click sur un élément du diagram, par exemple exploiter les données que l’on fournit dans le DOM des éléments (ex : ip, description etc …).
 
 ##### Exemple 
 html : 
@@ -128,7 +128,7 @@ JavaScript :
      
      $("#detail legend").css({ "color": "white", "font-weight": "bold"});
                     
-       optionDblclick($item, $("#detail"), $("#monDiagram") );
+       optionDblclick($item, $("#detail"), $(".monDiagram") );
   }
   … 
 }
@@ -179,7 +179,7 @@ Il est à noter que toutes ces options sont optionnels, si aucune options n’es
 Une fois que le diagram est initialisé avec l’ensemble des options souhaités, et que vous avez réalisé votre schéma, vous pouvez exporter un schéma avec la commande : 
 
 ```sh
-$(“#monDiagram”).mkzmapperExport();
+$(“.monDiagram”).mkzmapperExport();
 ```
 cette commande va retourner l’objet contenant toutes les caractéristiques du schéma sous la forme vue plus haut.
 
@@ -188,7 +188,7 @@ cette commande va retourner l’objet contenant toutes les caractéristiques du 
 pour importer un objet schéma vers un diagram initialisé il suffit d’avoir la commande suivante : 
 
 ```sh
-$(“#monDiagram”).mkzmapperImport(schema);
+$(“.monDiagram”).mkzmapperImport(schema);
 ```
 
 ## Exportation d'un schéma en .png
@@ -205,5 +205,5 @@ $(“#monDiagram”).mkzmapperImport(schema);
 La fonction qui permet l’export prend en paramètre un callback avec comme paramètre l’image qui sera sous la forme : **<img src="data:image/png;base64,...”>**.
 
 ```sh
-$(“#monDiagram”).mkzmapperExportPNG(function(img){ console.log(img);});
+$(“.monDiagram”).mkzmapperExportPNG(function(img){ console.log(img);});
 ```

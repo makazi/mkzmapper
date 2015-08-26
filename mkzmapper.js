@@ -923,7 +923,7 @@ mkzmapper.createBlocks = function(JsonFile, diagram) {
         mkzmapper.createAnchor(newElement, diagram) // Création des ancres de liaison sur l'élément.
         mkzmapper.blockOptions(newElement, diagram, feeder); // Rend l'élément draggable dans le board et définit l'évènement click sur x.
 
-        newElement.dblclick(function(event) {
+        newElement.click(function(event) {
             diagram.data("mkzmapper-options").itemOnSelect($(this));
         });
 
