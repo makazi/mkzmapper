@@ -105,10 +105,8 @@
 
                 // If the document is clicked somewhere
                 $(document).bind("mousedown", function(e) {
-
-                    // If the clicked element is not the menu
-                    if (!$(e.target).parents(contextMenu.length > 0)) {
-
+                    // If the clicked element is not the menu;
+                    if (!$(e.target).parents('.mkzmapper-optionsContextMenu').length > 0) {
                         // Hide it
                         contextMenu.hide(100);
                     }
