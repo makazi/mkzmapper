@@ -257,9 +257,9 @@
 
                     }
 
-                    if(appui == 77 && mkzmapper.selected.connector[0] != undefined)
+                    if(appui == options.touchStyle && mkzmapper.selected.connector[0] != undefined)
                     {
-                        var conn  = mkzmapper.selected.connector[0];
+                        var conn  = mkzmapper.selected.connector[mkzmapper.selected.connector.length-1];
                         var posX  = parseInt($(conn.canvas).css("left"))+(parseInt($(conn.canvas).css("width"))/2);
                         var posY  = parseInt($(conn.canvas).css("top"))+(parseInt($(conn.canvas).css("height"))/2);
 
@@ -270,7 +270,6 @@
                         css({
                             top: posY + "px",
                             left: posX+ "px",
-                            /*display : "block",*/
                         });
 
                     }
@@ -536,6 +535,8 @@ mkzmapper.defaultOption = function (options) {
         "readOnly": false,
         "schema": {},
         "colorSelect": "red",
+        "limitedAnchor" : true,
+        "touchStyle"    : 77,
     };
 
     // CONNECTOR OPTION par défaut.
@@ -758,7 +759,7 @@ mkzmapper.createAnchor = function(item, diagram) {
             width: 10,
             height: 10
         }], // Forme de l'ancre.
-        maxConnections: 1000, // Nombre maximum de connexion sur une ancre.
+        maxConnections: diagram.data("mkzmapper-options").limitedAnchor ? 1 : -1, // Nombre maximum de connexion sur une ancre.
         paintStyle: {
             fillStyle: "#565656",
             outlineColor: "#363636",

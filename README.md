@@ -72,13 +72,13 @@ var options =
 $(“.monDiagram”).mkzmapper(options);
 ```
 - **menuStyle** : tableau d’objet json permettant de définir l’ensemble des styles d’un Connector. en fournissant un certain nombre de paramètre, dont le seul obligatoire est l’action.
-	- *action* : définit le nom de l’action dans le DOM du contextMenu. [obligatoire].
-	- *name* : définit le texte qui apparaitera dans le context menu (par défaut ce qui a été fourni dans le champ action).
-	- *type*: définit le nom utilisé pour définir le type de connector dans jsPlumb.
-	- *color* : définit la couleur du connecteur.
-	- *colorHover* : définit la couleur du connecteur lors de son survol.
-	- *connector* : **“Straight”** ou **“Bezier”**, définit si le connecteur sera droit ou incurvé, par défaut il sera droit.
-	- *dashed* : *true* ou *false*, définit si le connecteur est en pointillé ou non, par défaut il sera à false. 
+  - *action* : définit le nom de l’action dans le DOM du contextMenu. [obligatoire].
+  - *name* : définit le texte qui apparaitera dans le context menu (par défaut ce qui a été fourni dans le champ action).
+  - *type*: définit le nom utilisé pour définir le type de connector dans jsPlumb.
+  - *color* : définit la couleur du connecteur.
+  - *colorHover* : définit la couleur du connecteur lors de son survol.
+  - *connector* : **“Straight”** ou **“Bezier”**, définit si le connecteur sera droit ou incurvé, par défaut il sera droit.
+  - *dashed* : *true* ou *false*, définit si le connecteur est en pointillé ou non, par défaut il sera à false. 
 
 ##### Exemple 
 JavaScript :
@@ -143,34 +143,35 @@ JavaScript :
 ```
 - *Connections* :
 
-	```sh
-	connections  : [
-	  {
-	     source :  ,/* contient l’id de l’ancre source, sous la forme “<position><data-id  element>”, avec <position> qui peut etre “bottom<1,2,3>” ou top, left, right*/
-	     target : , /* pareil mais avec l’ancre cible*/
-	     style  : , /* Contient le type, du style appliqué au connector*/
+  ```sh
+  connections  : [
+    {
+       source :  ,/* contient l’id de l’ancre source, sous la forme “<position><data-id  element>”, avec <position> qui peut etre “bottom<1,2,3>” ou top, left, right*/
+       target : , /* pareil mais avec l’ancre cible*/
+       style  : , /* Contient le type, du style appliqué au connector*/
 
-	   }
-	]
-	```
+     }
+  ]
+  ```
 - *Servers* : 
 
-	```sh
-	servers  : [
-	  {
-	     id :  ,/* contient l’id de l’element (dans le DOM)*/
-	     posX : , /*position en X dans le diagram*/
-	     posY : , /*position en y dans le diagram*/
-	     data : , /*contient l’ensembles des Extradata*/
-	     txt  : , /*Contient le texte écrit dans la div*/
-	   }
-	]
-	```
+  ```sh
+  servers  : [
+    {
+       id :  ,/* contient l’id de l’element (dans le DOM)*/
+       posX : , /*position en X dans le diagram*/
+       posY : , /*position en y dans le diagram*/
+       data : , /*contient l’ensembles des Extradata*/
+       txt  : , /*Contient le texte écrit dans la div*/
+     }
+  ]
+  ```
 - *menuStyle* : contient l’ensemble des styles initialisé sur le diagram qui contenait le schéma, pour pouvoir appliquer les styles aux connecteurs.
 
 - **readOnly** : prend true ou false, si l’option est mise à true alors l’utilisateur ne pourra pas effectuer de modification sur le schéma (que ce soit sur les liens, la position ou la présence d’un élément). Par défaut le champ est false.
-
-
+- **colorSelect** : prend une couleur, qui sera affectée aux éléments lors de leur sélection (sélections d'éléments ou d'un connecteur). Par defaut à red.
+- **limitedAnchor** : prend un booleen (true ou false), si la valeur est à true alors chaque ancre ne pourra se voir attacher qu'une seule connexion - ce qui induit que l'on peut drag & drop la connexion sur une autre ancre - ce qui n'est pas le cas si les ancres sont multiple (valeur à false). Par défaut elle est à true.
+- **touchStyle** : Permet de définir la touche permettant d'ouvrir le menu pour changer le style d'un connecteur sélectionné. Par défaut la touche "m".
 
 Il est à noter que toutes ces options sont optionnels, si aucune options n’est fournie le bloc deviendra un bloc qui sera dans un second temps capable de recevoir l’importation d’un schéma et d’en exporter les modifications par exemple.
 
