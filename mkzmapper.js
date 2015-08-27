@@ -73,7 +73,7 @@
                 {
                     Class = menuStyle[i].dashed ? "fa-ellipsis-h" : "fa-minus"; //choix de l'icône selon pointillé ou non.
 
-                    $("<li>").data("mkzmapper-action", menuStyle[i].action).append("<span class= 'fa " + Class + "' style='color :" + menuStyle[i].color + ";'></span> " + menuStyle[i].name).appendTo(contextMenu);
+                    $("<li>").data("mkzmapper-action", menuStyle[i].action).append("<span class= 'fa " + Class + "' style='color :" + menuStyle[i].color + ";'></span><strong></strong> " + menuStyle[i].name).appendTo(contextMenu);
                     if (i != menuStyle.length - 1)
                         $("<li>").append('----').appendTo(contextMenu);
                 }
@@ -197,7 +197,9 @@
                         accept: options.feeder+">.mkzmapper-droppable",
                         drop: function(event, ui) // Lors d'un drop on définit les éléments suivant :
                             {
-                                if(parseInt(ui.draggable.css("left")) > diagram.findPos().x && parseInt(ui.draggable.css("left")) <= diagram.findPos().x+parseInt(ViewBoard.css("width")) && parseInt(ui.draggable.css("top")) > diagram.findPos().y && parseInt(ui.draggable.css("top")) <= diagram.findPos().y+ parseInt(ViewBoard.css("height")) )
+                                offsetItemX = ui.draggable.parent().findPos().x;
+                                offsetItemY = ui.draggable.parent().findPos().y;
+                                if(parseInt(ui.draggable.css("left")) + offsetItemX > ViewBoard.findPos().x && parseInt(ui.draggable.css("left"))+offsetItemX <= ViewBoard.findPos().x+parseInt(ViewBoard.css("width")) && parseInt(ui.draggable.css("top"))+offsetItemY > ViewBoard.findPos().y && parseInt(ui.draggable.css("top"))+offsetItemY <= ViewBoard.findPos().y+ parseInt(ViewBoard.css("height")) )
                                 {
                                     // VARIABLES
                                     var current = ui.draggable; // récupère l'éléments courant.
@@ -211,11 +213,11 @@
 
 
                                     // Calcul de la position de l'élément sur le board, selon la position où il a été droppé.
-                                    var left = scrollX + parseInt(current.css('left')) - offsetX;
-                                    var top = scrollY + parseInt(current.css('top')) - offsetY;
+                                    var left = scrollX + parseInt(current.css('left'))+offsetItemX - offsetX;
+                                    var top = scrollY + parseInt(current.css('top'))+offsetItemY - offsetY;
                                     var newCurrent = current.clone().addClass("mkzmapper-element").appendTo(board).css({
                                         "left": left+'px',
-                                        "top":  top+'px'
+                                        "top":  top+'px' 
                                     });
 
                                     // On réaffecte les données.
@@ -288,7 +290,7 @@
 
                     // On mémorise la position du curseur pour déterminer la eone à la fin. 
                     $(this).data("mkzmapper-mousePos", {"posX": posX, "posY": posY});
-                    $("<div>").addClass("mkzmapper-selector").css({"position" :"absolute", "border" : "2px dashed red", "z-index" : 4000}).appendTo($(this));
+                    $("<div>").addClass("mkzmapper-selector").css({"position" :"absolute", "border" : "2px dashed"+options.colorSelect, "z-index" : 4000}).appendTo($(this));
                 });
 
                 // Si on sélectionne et que la souris se déplace.

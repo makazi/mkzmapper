@@ -27,17 +27,17 @@
   </head>
     <script>
     $(function(){
-      var DiagX = parseInt($("#monDiagram").findPos().x);
-      $("#monDiagram").css("width", parseInt($("html").css("width"))-DiagX -250);
-      $("#detail").css({ "height": "100%", "color": "#FFF", "left":($("#monDiagram").findPos().x+10+ parseInt($("#monDiagram").css("width")))+"px"})
+      $("#window1").css("width", parseInt($("html").css("width"))-350);
+      $("#monDiagram").css("width", parseInt($("html").css("width"))-620);
+      $("#detail").css({ height : $("#monDiagram").css("height"), "color": "#FFF", "left":( parseInt($("#monDiagram").css("width"))+20)+"px", "top": "60px",})
       var options = 
       {
         width         : 2000,
         height        : 1000,
         feeder        : ".monFeeder",
-        colorSelect   : "blue",
+        colorSelect   : "#F55C5C",
         limitedAnchor : true,
-        touchStyle    : 78,
+        touchStyle    : 77,
         menuStyle : [
             { "action" : "bddS"   , "name" : "BDD (Straight)", "color" : "#D58888", "colorHover": "#A86969", "connector" : "Straight", "arrow" : "both", "dashed" : true},
             { "action" : "bddC"   , "name" : "BDD (Curving)"    , "color" : "#D58888", "colorHover": "#A86969", "connector" : "Bezier"  , "arrow" : "forward", "dashed" : true},
@@ -48,27 +48,24 @@
         ],
         itemOnSelect : function($item){
 
-        $("#detail legend").css({ "color": "white", "font-weight":" bold"});
-
-        optionDblclick($item, $("#detail"), $("#monDiagram") );
+          optionDblclick($item, $("#info"), $("#monDiagram") );
         }
     };
-
       $(".monDiagram").mkzmapper(options);
 
       $('#export').click(function(event){
-        var objet = $("#monDiagram").mkzmapperExport();
+        var objet = $("#monDiagram2").mkzmapperExport();
         seen = [];
         json = JSON.stringify(objet, null ,'\t');
         $("#exportRes").val(json);
       });
 
       $("#import").click(function(event){
-        $("#monDiagram").mkzmapperImport(JSON.parse($("#exportRes").val()));
+        $("#monDiagram2").mkzmapperImport(JSON.parse($("#exportRes").val()));
       });
 
       $("#exportPNG").click(function(event){
-        $("#monDiagram").mkzmapperExportPNG(function(img){
+        $("#monDiagram2").mkzmapperExportPNG(function(img){
           window.open($(img).attr("src"));
         });
       });
@@ -78,7 +75,9 @@
     </script>
     
   <body>
-  <div>
+  <div style= "background: url('entete.png'); height: 160px;"></div>
+  <div style = "position: relative; top: 0px; left: 0px; width : 311px">
+  <div style = "color : white;"> <span><h3> <span class="fa fa-list-ul"></span> Elements pour schéma (Feeder)</h3> </span></div>
     <ul class ="monFeeder">
       <li class = "bdd" data-mkzmapper-id="bdd1" data-info= '{ "ip" : "193.164.22", "Description" : "Base de données MongoDB n°1" }'> <i class="fa fa-database" style ="color : white; margin: 0px 10px;"></i> Mongo01 </li>
       <li class = "bdd" data-mkzmapper-id="bdd2" data-info= '{ "ip" : "193.164.32", "Description" : "Base de MongoDB données n°2" }'> <i class="fa fa-database" style ="color : white; margin: 0px 10px;"></i> Mongo02 </li>
@@ -88,24 +87,40 @@
       <li class = "api"  data-mkzmapper-id="api2" data-info= '{ "ip" : "103.104.22", "Description" : "Api time" }'> <span> <i class="fa fa-tablet" style ="color : white; margin: 0px 10px;"></i> API Time </span> </li>
       <li class = "api"  data-mkzmapper-id="api3" data-info= '{ "ip" : "103.264.22", "Description" : "Api date" }'> <span> <i class="fa fa-tablet" style ="color : white; margin: 0px 10px;"></i> API Date</span> </li>
       <li class = "interface" data-mkzmapper-id="interface1" data-info= '{ "host" : "localhost:6060", "Description" : "Interface de contrôle" }'> Interface de contrôle </li>
-      <li class = "interface" data-mkzmapper-id="interface2" data-info= '{  "host" : "localhost:5050", "Description" : "Interface Administration"}'> Interface d'administa</li>
+      <li class = "interface" data-mkzmapper-id="interface2" data-info= '{  "host" : "localhost:5050", "Description" : "Interface Administration"}'> Interface d'administ</li>
     </ul>
   </div>
 
+  <div id = "window1" style = "top: 168px; position: absolute; left: 350px;">
+    <div style = "color : white;"><h3> <i class="fa fa-bar-chart"></i> Zone de schéma 1 (Diagram) </h3></div>
     <div id = "monDiagram" class = "monDiagram" style = ""></div>
-    <div id = "detail" style= "width : 250px; position : absolute; top : 0px"></div>
-    
-
-    <div style = "position: relative; border: 2px solid #B06565; width: 560px; height: 140px; float: left; top: 15px; background: #211E1E none repeat scroll 0% 0%;">
-      <div id="export"> Exporter </div>
-      <div id="import"> Importer </div>
-      <textarea rows="4" cols="50"  id="exportRes" style="position: absolute; left: 150px; top: 20px; width: 390px;max-width: 390px;">
-      </textarea>
+    <div id = "detail" style= "width : 220px; position : absolute; top : 160px">
+      <legend id="title" style="color : white;"><i class="fa fa-pencil-square-o"></i> Description </legend>
+      <div id = "info"></div>
     </div>
-    <div style = "position : relative; left :585px">
-      <div id="exportPNG"> Exporter png </div>
-      <div class="monDiagram" id="image" style = "width : 800px; height : 400px; border : 1px dashed black; position : absolute; left: 150px; top: 10px;">
+    <span style= "font-style : italic; color : #848484;"><i class="fa fa-pencil"></i> Editer le style de connecteur : clic sur le connecteur & touche "m"</i></span><br>
+    <span  style= "font-style : italic; color : #848484;"><i class="fa fa-times"></i> Supprimer un element ou connecteur : Selectionnez le ou les éléments & touche "supp" <i id = "touche"></i></span>
+
+  </div>
+
+    <div style = "position: relative; border: 2px solid #B06565; width: 630px; height: 240px; top: 700px;">
+      <div style ='position : absolute; left : 7px; color : white'><h3><i class="fa fa-play"></i> Actions plugin mkzmapper </h3></div>
+      <div id="export"><i class="fa fa-arrow-left"></i> Exporter le schéma (json)</div>
+      <div id="import"><i class="fa fa-arrow-right"></i> Importer le schéma (json)</div>
+      <div id="exportPNG"><i class="fa fa-file-image-o"></i> Exporter le schéma (.png) </div>
+      <div style="position: absolute; left: 220px; top: 60px; ">
+        <textarea rows="4" cols="50"  id="exportRes" style=" width: 390px; max-width: 390px; max-height : 141px">
+        </textarea>
+        <span style = "color: white"> Résultat de l'export en json</span>
       </div>
+
+    </div>
+    <div style = "position : absolute; left: 700px; top: 868px;">
+      <div style = "color : white;"><h3> <i class="fa fa-bar-chart"></i> Zone de schéma 2 (Diagram) </h3></div>
+      <div class="monDiagram" id="monDiagram2" style = "width : 800px; height : 400px; border : 1px dashed black;">
+      </div>
+      <span style= "font-style : italic; color : #848484;"><i class="fa fa-pencil"></i> Editer le style de connecteur : clic sur le connecteur & touche "m"</i></span><br>
+      <span  style= "font-style : italic; color : #848484;"><i class="fa fa-times"></i> Supprimer un element ou connecteur : Selectionnez le ou les éléments & touche "supp" <i id = "touche"></i></span>
     </div>
 
   </body>

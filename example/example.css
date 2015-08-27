@@ -1,6 +1,6 @@
 body 
 {
-	background : #2B2C32;
+	background: #2B2C32 url("fond.png") no-repeat scroll 0% 514px;
 }
 
 a:link 
@@ -19,17 +19,16 @@ a:hover
 	margin: 0px;
 	padding: 8px;
 	float: left;
-	border-right: #A9FFF3 4px solid;
-	border-bottom: #A9FFF3 4px solid;
+	border: #A9FFF3 4px solid;
+
 }
 
 #monDiagram
 {
 	height: 491px;
 	position: relative;
-	top: 0px;
-	left: 310px;
-	border-bottom: 4px solid #A9FFF3;
+	border: 4px solid #FFFEA3;
+	background : #92C9D2;
 }
 
 .bdd
@@ -63,6 +62,7 @@ a:hover
 	list-style-type: none;
 	color : white;
 	background: #202020;
+	position: relative;
 }
 
 .api span
@@ -91,37 +91,40 @@ a:hover
 {
 	position: absolute;
 	left: 7px;
-	top: 20px;
-	width: 135px;
+	top: 60px;
+	width: 195px;
 	height: 30px;
 	text-align: center;
 	background: #C66F6F  none repeat scroll 0% 0%;
 	color: #FFF;
 	padding-top: 10px;
+	border: 2px solid white;
 }
 
 #import
 {
 	position: absolute;
 	left: 7px;
-	top: 80px;
-	width: 135px;
+	top: 120px;
+	width: 195px;
 	height: 30px;
 	text-align: center;
 	background: #81C9AD none repeat scroll 0% 0%;
 	color: #FFF;
 	padding-top: 10px;
+	border: 2px solid white;
 }
 
 #exportPNG
 {
 	position: absolute;
-	left: 0px;
-	top: 20px;
-	width: 135px;
+	left: 7px;
+	top: 180px;
+	width: 195px;
 	height: 30px;
 	text-align: center;
 	background: #6FA4A8 none repeat scroll 0% 0%;
 	color: #FFF;
 	padding-top: 10px;
+	border: 2px solid white;
 }
