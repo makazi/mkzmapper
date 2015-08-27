@@ -39,9 +39,7 @@
             var widthDiagram = $(this).css("width");
             var heightDiagram = $(this).css("height");
 
-            $(this).css({
-                "height": "",
-            }); // On redéfinit le bloc comme étant le limiteur.
+           
 
             // Création du bloc permettant d'avoir un scroll.
             var ViewBoard = $("<div>").addClass("mkzmapper-ViewBoard").addClass("mkzmapper-container").css({
