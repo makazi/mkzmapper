@@ -484,7 +484,10 @@
 
     $.fn.mkzmapperExportPNG = function(callback) {
         var el    =  $(this).find(".mkzmapper-board").get(0);
-        var style = $(el).css("background-image");
+        $(el).find("._jsPlumb_endpoint").each(function(){
+           $(this).hide();
+        });
+        var style =  $(el).css("background-image");
         $(el).css("background", "transparent");
         var diagram = $(this);
         html2canvas(el, {
@@ -501,6 +504,9 @@
                     ctx.drawSvg(svgStr, $svg.css("left"), $svg.css("top"));
                 });
                 var img = Canvas2Image.convertToPNG(canvas); // transforme en <img src="data:image/png;base64,..."
+                $(el).find("._jsPlumb_endpoint").each(function(){
+                    $(this).show();
+                });
                 $(el).css("background-image", style);
                 callback(img);
             }
@@ -928,7 +934,11 @@ mkzmapper.createBlocks = function(JsonFile, diagram) {
     var elementExist;
 
     var feeder = $(diagram.data("mkzmapper-options").feeder);
-
+    // Supprime toutes les sélection
+    mkzmapper.selected.elements = [];
+    mkzmapper.selected.connector = [];
+    mkzmapper.selected.diagram = "";
+    // Supprime le schéma en court.
     $(board).find('.mkzmapper-element').each(function() {
         mkzmapper.deleteServer($(this), feeder, Plumb, board);
     });
