@@ -26,6 +26,7 @@ a:hover
 #monDiagram
 {
 	height: 491px;
+	width : 963px;
 	position: relative;
 	border: 4px solid #FFFEA3;
 	background : #92C9D2;

@@ -27,8 +27,6 @@
   </head>
     <script>
     $(function(){
-      $("#window1").css("width", parseInt($("html").css("width"))-350);
-      $("#monDiagram").css("width", parseInt($("html").css("width"))-620);
       $("#detail").css({ height : $("#monDiagram").css("height"), "color": "#FFF", "left":( parseInt($("#monDiagram").css("width"))+20)+"px", "top": "60px",})
       var options = 
       {
@@ -91,7 +89,7 @@
     </ul>
   </div>
 
-  <div id = "window1" style = "top: 168px; position: absolute; left: 350px;">
+  <div id = "window1" style = "top: 168px; position: absolute; left: 350px; width : 1233">
     <div style = "color : white;"><h3> <i class="fa fa-bar-chart"></i> Zone de schéma 1 (Diagram) </h3></div>
     <div id = "monDiagram" class = "monDiagram" style = ""></div>
     <div id = "detail" style= "width : 220px; position : absolute; top : 160px">
